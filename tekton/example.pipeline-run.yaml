@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: prototype-run-
+  namespace: tekton-devfile-prototype
+spec:
+  serviceAccountName: build-bot
+  pipelineRef:
+    name: prototype
+  params:
+    - name: repo-url
+      value: https://github.com/JustinKuli/user-app-build-deploy.git
+    - name: image
+      value: docker.io/justinkulibm/devfile-build-test:mytag
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        metadata:
+          name: mypvc
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 32Mi

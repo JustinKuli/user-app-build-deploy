@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: tekton-devfile-prototype
+commonLabels:
+  app.kubernetes.io/part-of: tekton-devfile-prototype
+resources:
+  - namespace.yaml
+  - my-docker-creds.secret.yaml
+  - resources/build-bot.service-account.yaml
+  - resources/prototype.pipeline.yaml
+  - resources/git-clone.task.yaml
+  - resources/fetch-dockerfile.task.yaml
+  - resources/buildah.task.yaml
