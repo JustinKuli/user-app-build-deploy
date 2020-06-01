@@ -13,3 +13,4 @@ resources:
   - resources/buildah.task.yaml
   - resources/deploy-task.yaml
   - resources/fetch-manifest.task.yaml
+  - resources/change-manifest-task.yaml

@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: change-manifest
+spec:
+  workspaces:
+    - name: source
+      mountPath: /source
+  steps:
+    - name: change-manifest
+      image: mikefarah/yq
+      script: |
+        echo "todo"

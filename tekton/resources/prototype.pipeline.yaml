@@ -56,11 +56,22 @@ spec:
         - name: source
           workspace: shared-workspace
 
+      # This needs to replace metadata.name (at the top-level)
+      # and spec.applicationImage, with what we've just built
+    - name: change-manifest
+      taskRef:
+        name: change-manifest
+      runAfter:
+        - fetch-manifest
+      workspaces:
+        - name: source
+          workspace: shared-workspace      
+
     - name: deploy-app
       taskRef:
         name: deploy
       runAfter:
-        - build-and-push
+        - change-manifest
       workspaces:
         - name: source
           workspace: shared-workspace
