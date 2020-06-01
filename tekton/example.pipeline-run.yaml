@@ -9,9 +9,9 @@ spec:
     name: prototype
   params:
     - name: repo-url
-      value: https://github.com/JustinKuli/user-app-build-deploy.git
+      value: https://github.com/a-roberts/user-app-build-deploy.git
     - name: image
-      value: docker.io/justinkulibm/devfile-build-test:mytag
+      value: docker.io/adamroberts/devfile-build-test:latest
   workspaces:
     - name: shared-workspace
       volumeClaimTemplate:

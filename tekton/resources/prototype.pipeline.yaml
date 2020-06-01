@@ -10,6 +10,7 @@ spec:
       type: string
   workspaces:
     - name: shared-workspace
+
   tasks:
     - name: fetch-repository
       taskRef:
@@ -22,6 +23,7 @@ spec:
           value: "$(params.repo-url)"
         - name: subdirectory
           value: repo
+
     - name: fetch-dockerfile
       taskRef:
         name: fetch-dockerfile
@@ -30,6 +32,7 @@ spec:
       workspaces:
         - name: source
           workspace: shared-workspace
+
     - name: build-and-push
       taskRef:
         name: buildah
@@ -43,3 +46,32 @@ spec:
           value: "$(params.image)"
         - name: CONTEXT
           value: "repo/"
+
+    - name: fetch-manifest
+      taskRef:
+        name: fetch-manifest
+      runAfter:
+        - build-and-push # Todo optimise: should we do this upfront instead of after build/push? Could be expensive
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+
+      # This needs to replace metadata.name (at the top-level)
+      # and spec.applicationImage, with what we've just built
+    - name: change-manifest
+      taskRef:
+        name: change-manifest
+      runAfter:
+        - fetch-manifest
+      workspaces:
+        - name: source
+          workspace: shared-workspace      
+
+    - name: deploy-app
+      taskRef:
+        name: deploy
+      runAfter:
+        - change-manifest
+      workspaces:
+        - name: source
+          workspace: shared-workspace

@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy
+spec:
+  workspaces:
+    - name: source
+      mountPath: /source
+  steps:
+    - name: deploy
+      image: lachlanevenson/k8s-kubectl
+      script: |
+        echo "contents: $(cat /source/manifest.yaml)"
+        echo "todo, thing to deploy: /source/manifest.yaml"

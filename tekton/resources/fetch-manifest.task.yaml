@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: fetch-manifest
+spec:
+  workspaces:
+    - name: source
+      mountPath: /source
+  params: 
+    - name: devfilePath
+      default: "repo/devfile.yaml"
+    - name: manifestPath
+      default: "manifest.yaml"
+  steps:
+    - name: fetch-manifest
+      image: mikefarah/yq
+      script: |
+        DEVFILE="$(workspaces.source.path)/$(params.devfilePath)"
+        LOOKUP='components.(id==deploy-image).manifest.path'
+        MANIFEST_URL=$(yq r $DEVFILE $LOOKUP) 
+        wget -O "$(workspaces.source.path)/$(params.manifestPath)" $MANIFEST_URL

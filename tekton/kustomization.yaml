@@ -11,3 +11,6 @@ resources:
   - resources/git-clone.task.yaml
   - resources/fetch-dockerfile.task.yaml
   - resources/buildah.task.yaml
+  - resources/deploy-task.yaml
+  - resources/fetch-manifest.task.yaml
+  - resources/change-manifest-task.yaml
