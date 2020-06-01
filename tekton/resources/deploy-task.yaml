@@ -6,11 +6,9 @@ spec:
   workspaces:
     - name: source
       mountPath: /source
-  params:
-    - name: path # Can be a file or directory
-      default: /source/$(params.path)
   steps:
     - name: deploy
       image: lachlanevenson/k8s-kubectl
       script: |
-        echo "todo, thing to deploy: $(params.path)"
+        echo "contents: $(cat /source/manifest.yaml)"
+        echo "todo, thing to deploy: /source/manifest.yaml"
