@@ -1,0 +1,23 @@
+# From https://raw.githubusercontent.com/tektoncd/catalog/v1beta1/git/git-clone.yaml
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy
+spec:
+  params:
+    - name: path # Can be a file or directory
+  steps:
+    - name: deploy-web
+    taskRef:
+      name: deploy-using-kubectl
+    resources:
+      inputs:
+        - name: source
+          resource: source-repo
+        - name: image
+          resource: web-image
+          from:
+            - build-skaffold-web
+    params:
+      - name: path
+        value: /workspace/shared-workspace/$(params.path)
