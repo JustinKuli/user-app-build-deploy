@@ -8,8 +8,9 @@ spec:
       mountPath: /source
   params:
     - name: path # Can be a file or directory
+      default: /source/$(params.path)
   steps:
     - name: deploy
       image: lachlanevenson/k8s-kubectl
       script: |
-        echo "todo, thing to deploy: /source/$(params.path)"
+        echo "todo, thing to deploy: $(params.path)"

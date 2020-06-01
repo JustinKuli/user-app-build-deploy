@@ -10,4 +10,4 @@ spec:
     - name: change-manifest
       image: mikefarah/yq
       script: |
-        echo "todo"
+        echo "todo change manifest"
