@@ -21,13 +21,12 @@ curl -L https://raw.githubusercontent.com/application-stacks/runtime-component-o
 curl -L https://raw.githubusercontent.com/application-stacks/runtime-component-operator/master/deploy/releases/0.6.0/runtime-component-operator.yaml | sed -e "s/RUNTIME_COMPONENT_WATCH_NAMESPACE/${WATCH_NAMESPACE}/" | oc apply -n ${OPERATOR_NAMESPACE} -f -
 ```
 
-4. Add your credentials to the my-docker-creds.secret.yaml, adjusting these lines:
+4. Add your credentials to the `tekton/Secret.docker-credentials.yaml` file, adjusting these lines:
 ```
 stringData:
 #  username: FILL IN YOUR INFO!
 #  password: FILL IN YOUR INFO!
 ```
-TODO: Adjust this to use a generator in kustomize? 
 
 5. Create the resources defining the pipeline:
 ```

@@ -4,7 +4,7 @@ namespace: tekton-devfile-prototype
 commonLabels:
   app.kubernetes.io/part-of: tekton-devfile-prototype
 resources:
-  - my-docker-creds.secret.yaml
+  - Secret.docker-credentials.yaml
   - resources/Namespace.tekton-devfile-prototype.yaml
   - resources/Pipeline.prototype.yaml
   - resources/Role.devfile-role.yaml
