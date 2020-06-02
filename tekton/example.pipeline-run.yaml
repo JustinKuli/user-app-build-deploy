@@ -11,8 +11,8 @@ spec:
     - name: repo-url
       value: https://github.com/a-roberts/user-app-build-deploy.git
     - name: image
-      value: docker.io/justinkulibm/devfile-build-test
+      value: docker.io/adamroberts/devfile-build-test
   workspaces:
     - name: shared-workspace
       persistentVolumeClaim:
-        claimName: prototype-pvc-XXXXX
+        claimName: prototype-pvc-claim

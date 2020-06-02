@@ -5,7 +5,28 @@ Add your Docker credentials to `tekton/my-docker-creds.secret.yaml` so that you 
 kubectl apply -k tekton/
 ```
 
-To run the example pipeline, you'll need to create a PersistentVolume/Claim and reference it in the example PipelineRun. Fill in your details for the docker registry and the location of your github repository. Then you can use `kubectl create -f example.pipeline-run.yaml` to run the pipeline.
+To run the example pipeline, you can create a PersistentVolume and reference it in the example PipelineRun. An example claim is already provided. Your volume should be ReadWriteOnce and capable of handling 50 MB of storage requests
+
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example
+spec:
+  capacity:
+    storage: 50 Mi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: slow
+  nfs:
+    path: /tmp
+    server: 172.17.0.2
+```
+
+for example. Hint, use the OpenShift UI and the server address will be filled in for you.
+        
+Fill in your details for the docker registry and the location of your github repository. Then you can use `kubectl create -f example.pipeline-run.yaml` to run the pipeline.
 
 The pipeline takes URLs for the github repository hosting the code with the devfile and the target URL for the created image. Then it:
 

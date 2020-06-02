@@ -13,3 +13,4 @@ resources:
   - resources/fetch-dockerfile.task.yaml
   - resources/git-clone.task.yaml
   - resources/prototype.pipeline.yaml
+  - resources/example.pvc.yaml
