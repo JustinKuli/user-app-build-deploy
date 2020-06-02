@@ -16,23 +16,15 @@ spec:
   steps:
     - name: fetch-manifest
       image: mikefarah/yq
-      script: >
+      script: |
         MANIFEST_PATH="$(workspaces.source.path)/$(params.manifestSubPath)"
         DEVFILE="$(workspaces.source.path)/$(params.devfilePath)"
         LOOKUP='components.(id==deploy-image).manifest.path'
-
-        # Download the manifest based on the URL in the devfile.yaml:
+        cat $DEVFILE
+        echo $LOOKUP
+        echo "done the lookup"
         MANIFEST_URL=$(yq r $DEVFILE $LOOKUP)
         wget -O $MANIFEST_PATH $MANIFEST_URL
-
-        # Fill in new image details
         yq w -i $MANIFEST_PATH 'spec.applicationImage' "$(params.newImage)"
-
-        # Should we fill in the project name from the devfile.yaml?
-        # Not great... what if there are multiple projects?
-        # PROJECT_NAME=$(yq r $DEVFILE 'projects[0].name') 
-        # yq w -i $MANIFEST_PATH 'metadata.name' $PROJECT_NAME
-
-        # Should we fill in the port?
-        # PORT=$(yq r $DEVFILE 'components.*.(endpoints)' | yq r - '[0].port')
-        # yq w -i $MANIFEST_PATH 'spec.service.port' $PORT
+        echo "Manifest at $(MANIFEST_PATH), printing it"
+        cat $MANIFEST_PATH

@@ -13,6 +13,9 @@ spec:
     - name: deploy
       image: lachlanevenson/k8s-kubectl
       script: |
+        find .
+        ls -la
+        pwd
         echo "$(workspaces.source.path)/$(params.manifestSubPath)"
         cat "$(workspaces.source.path)/$(params.manifestSubPath)"
         kubectl apply -f "$(workspaces.source.path)/$(params.manifestSubPath)"

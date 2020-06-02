@@ -1,34 +1,21 @@
-# Building with tekton
+# Building with Tekton
+
+First, configure your OpenShift cluster with:
+
+`oc adm policy add-scc-to-user privileged -z build-bot -n tekton-devfile-prototype`
 
 Add your Docker credentials to `tekton/my-docker-creds.secret.yaml` so that you can push/pull images to your own repository, then setup the pipeline and tasks with:
 ```bash
 kubectl apply -k tekton/
 ```
 
-To run the example pipeline, you can create a PersistentVolume and reference it in the example PipelineRun. An example claim is already provided. Your volume should be ReadWriteOnce and capable of handling 50 MB of storage requests
-
-```
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: example
-spec:
-  capacity:
-    storage: 50 Mi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: slow
-  nfs:
-    path: /tmp
-    server: 172.17.0.2
-```
+To run the example pipeline, you can create a PersistentVolume and reference it in the example PipelineRun. An example claim is already provided. Your volume should be ReadWriteOnce and capable of handling 50 MB of storage requests. We've had good success with ceph and dynamic provisioning.
 
 for example. Hint, use the OpenShift UI and the server address will be filled in for you.
         
-Fill in your details for the docker registry and the location of your github repository. Then you can use `kubectl create -f example.pipeline-run.yaml` to run the pipeline.
+Fill in your details for the Docker registry and the location of your GitHub repository. Then you can use `kubectl create -f example.pipeline-run.yaml` to run the Tekton Pipeline.
 
-The pipeline takes URLs for the github repository hosting the code with the devfile and the target URL for the created image. Then it:
+The Pipeline takes URLs for the GitHub repository hosting the code with the devfile and the target URL for the created image. Then it:
 
 1. Pulls the repository.
 2. Reads the `devfile.yaml` and fetches the specified `Dockerfile` and deployment manifest (k8s resource).
