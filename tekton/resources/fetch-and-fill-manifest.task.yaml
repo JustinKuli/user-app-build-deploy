@@ -28,3 +28,7 @@ spec:
         yq w -i $MANIFEST_PATH 'spec.applicationImage' "$(params.newImage)"
         echo "Manifest at $(MANIFEST_PATH), printing it"
         cat $MANIFEST_PATH
+        PROJECT_NAME=$(yq r $DEVFILE 'projects[0].name') 
+        yq w -i $MANIFEST_PATH 'metadata.name' $PROJECT_NAME
+        PORT=$(yq r $DEVFILE 'components.*.(endpoints)' | yq r - '[0].port')
+        yq w -i $MANIFEST_PATH 'spec.service.port' $PORT

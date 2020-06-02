@@ -15,5 +15,5 @@ spec:
   workspaces:
     - name: shared-workspace
       persistentVolumeClaim:
-        claimName: prototype-pvc-rx6k2
+        claimName: prototype-pvc-replaceme
   
