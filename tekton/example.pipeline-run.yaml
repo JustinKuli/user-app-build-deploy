@@ -11,15 +11,8 @@ spec:
     - name: repo-url
       value: https://github.com/a-roberts/user-app-build-deploy.git
     - name: image
-      value: docker.io/adamroberts/devfile-build-test:latest
+      value: docker.io/justinkulibm/devfile-build-test
   workspaces:
     - name: shared-workspace
-      volumeClaimTemplate:
-        metadata:
-          name: mypvc
-        spec:
-          accessModes:
-            - ReadWriteOnce
-          resources:
-            requests:
-              storage: 32Mi
+      persistentVolumeClaim:
+        claimName: prototype-pvc-XXXXX

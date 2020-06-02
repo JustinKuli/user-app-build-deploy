@@ -7,10 +7,9 @@ resources:
   - namespace.yaml
   - my-docker-creds.secret.yaml
   - resources/build-bot.service-account.yaml
-  - resources/prototype.pipeline.yaml
-  - resources/git-clone.task.yaml
-  - resources/fetch-dockerfile.task.yaml
   - resources/buildah.task.yaml
   - resources/deploy-task.yaml
-  - resources/fetch-manifest.task.yaml
-  - resources/change-manifest-task.yaml
+  - resources/fetch-and-fill-manifest.task.yaml
+  - resources/fetch-dockerfile.task.yaml
+  - resources/git-clone.task.yaml
+  - resources/prototype.pipeline.yaml

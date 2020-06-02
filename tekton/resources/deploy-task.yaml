@@ -6,9 +6,13 @@ spec:
   workspaces:
     - name: source
       mountPath: /source
+  params:
+    - name: manifestSubPath
+      default: manifest.yaml
   steps:
     - name: deploy
       image: lachlanevenson/k8s-kubectl
       script: |
-        echo "contents: $(cat /source/manifest.yaml)"
-        echo "todo, thing to deploy: /source/manifest.yaml"
+        echo "$(workspaces.source.path)/$(params.manifestSubPath)"
+        cat "$(workspaces.source.path)/$(params.manifestSubPath)"
+        kubectl apply -f "$(workspaces.source.path)/$(params.manifestSubPath)"
