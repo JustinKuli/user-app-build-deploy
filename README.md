@@ -1,21 +1,55 @@
-# Building with Tekton
+# Configuring your tekton environment
 
-First, configure your OpenShift cluster with:
-
-`oc adm policy add-scc-to-user privileged -z build-bot -n tekton-devfile-prototype`
-
-Add your Docker credentials to `tekton/my-docker-creds.secret.yaml` so that you can push/pull images to your own repository, then setup the pipeline and tasks with:
-```bash
-kubectl apply -k tekton/
+1. Install tekton pipeline 0.11.0+. One easy way is to install Kabanero, which will automatically install the operator to configure it correctly on OpenShift:
+```
+curl -s -O -L https://github.com/kabanero-io/kabanero-operator/releases/download/0.9.0/install.sh && bash install.sh
 ```
 
-To run the example pipeline, you can create a PersistentVolume and reference it in the example PipelineRun. An example claim is already provided. Your volume should be ReadWriteOnce and capable of handling 50 MB of storage requests. We've had good success with ceph and dynamic provisioning.
+2. Setup a default storage class in your cluster. For example,
+```
+oc patch sc rook-ceph-cephfs-internal -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
+```
 
-for example. Hint, use the OpenShift UI and the server address will be filled in for you.
-        
-Fill in your details for the Docker registry and the location of your GitHub repository. Then you can use `kubectl create -f example.pipeline-run.yaml` to run the Tekton Pipeline.
+3. Install the RuntimeComponent Operator:
+```
+oc create ns runtime-component-operator
+OPERATOR_NAMESPACE=runtime-component-operator
+WATCH_NAMESPACE='""'
 
-The Pipeline takes URLs for the GitHub repository hosting the code with the devfile and the target URL for the created image. Then it:
+oc apply -f https://raw.githubusercontent.com/application-stacks/runtime-component-operator/master/deploy/releases/0.6.0/runtime-component-crd.yaml
+curl -L https://raw.githubusercontent.com/application-stacks/runtime-component-operator/master/deploy/releases/0.6.0/runtime-component-cluster-rbac.yaml | sed -e "s/RUNTIME_COMPONENT_OPERATOR_NAMESPACE/${OPERATOR_NAMESPACE}/" | oc apply -f -
+curl -L https://raw.githubusercontent.com/application-stacks/runtime-component-operator/master/deploy/releases/0.6.0/runtime-component-operator.yaml | sed -e "s/RUNTIME_COMPONENT_WATCH_NAMESPACE/${WATCH_NAMESPACE}/" | oc apply -n ${OPERATOR_NAMESPACE} -f -
+```
+
+4. Add your credentials to the my-docker-creds.secret.yaml, adjusting these lines:
+```
+stringData:
+#  username: FILL IN YOUR INFO!
+#  password: FILL IN YOUR INFO!
+```
+TODO: Adjust this to use a generator in kustomize? 
+
+5. Create the resources defining the pipeline:
+```
+oc apply -k tekton/
+```
+
+# Running the example pipeline
+
+6. Modify the example PipelineRun to point to your github repository and docker registry, adjusting these lines:
+```
+    - name: repo-url
+      value: https://github.com/a-roberts/user-app-build-deploy.git
+    - name: image
+      value: docker.io/justinkulibm/devfile-build-test
+```
+
+7. Create the example PipelineRun (and the PVC that it will use):
+```
+sed -e "s/PROTOTYPE_PVC/$(oc create -f tekton/example-pvc.yaml -o=jsonpath='{.metadata.name}')/" tekton/example.pipeline-run.yaml | oc create -f -
+```
+
+The pipeline takes URLs for the github repository hosting the code with the devfile and the target URL for the created image. Then it:
 
 1. Pulls the repository.
 2. Reads the `devfile.yaml` and fetches the specified `Dockerfile` and deployment manifest (k8s resource).
