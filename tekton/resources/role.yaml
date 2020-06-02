@@ -14,3 +14,4 @@ rules:
       - update
       - watch
       - list
+      - patch

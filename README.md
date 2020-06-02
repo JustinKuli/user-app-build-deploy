@@ -12,7 +12,7 @@ oc patch sc rook-ceph-cephfs-internal -p '{"metadata": {"annotations": {"storage
 
 3. Install the RuntimeComponent Operator:
 ```
-oc create ns runtime-component-operator
+oc new-project runtime-component-operator
 OPERATOR_NAMESPACE=runtime-component-operator
 WATCH_NAMESPACE='""'
 
