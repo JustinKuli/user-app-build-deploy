@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
@@ -22,7 +23,6 @@ spec:
           value: $(params.repo-url)
         - name: subdirectory
           value: repo
-
     - name: fetch-dockerfile
       taskRef:
         name: fetch-dockerfile
@@ -31,7 +31,6 @@ spec:
       workspaces:
         - name: source
           workspace: shared-workspace
-
     - name: build-and-push
       taskRef:
         name: buildah
@@ -45,7 +44,6 @@ spec:
           value: '$(params.image):$(tasks.fetch-repository.results.commit)'
         - name: CONTEXT
           value: repo/
-
     - name: fetch-and-fill-manifest
       taskRef:
         name: fetch-and-fill-manifest
@@ -57,7 +55,6 @@ spec:
       params:
         - name: newImage
           value: '$(params.image):$(tasks.fetch-repository.results.commit)'
-          
     - name: deploy-app
       taskRef:
         name: deploy

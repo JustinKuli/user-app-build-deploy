@@ -1,3 +1,4 @@
+---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -6,16 +7,20 @@ spec:
   workspaces:
     - name: source
       mountPath: /source
-  params: 
+  params:
     - name: devfilePath
-      default: "repo/devfile.yaml"
+      default: repo/devfile.yaml
     - name: dockerfilePath
-      default: "Dockerfile"
+      default: Dockerfile
   steps:
     - name: fetch-dockerfile
       image: mikefarah/yq
-      script: |
+      script: >
         DEVFILE="$(workspaces.source.path)/$(params.devfilePath)"
+
         LOOKUP='components.(id==build-image).dockerfile.path'
+
         DOCKERFILE_URL=$(yq r $DEVFILE $LOOKUP) 
-        wget -O "$(workspaces.source.path)/$(params.dockerfilePath)" $DOCKERFILE_URL
+
+        wget -O "$(workspaces.source.path)/$(params.dockerfilePath)"
+        $DOCKERFILE_URL

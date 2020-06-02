@@ -4,14 +4,14 @@ namespace: tekton-devfile-prototype
 commonLabels:
   app.kubernetes.io/part-of: tekton-devfile-prototype
 resources:
-  - namespace.yaml
   - my-docker-creds.secret.yaml
-  - resources/build-bot.service-account.yaml
-  - resources/buildah.task.yaml
-  - resources/deploy-task.yaml
-  - resources/fetch-and-fill-manifest.task.yaml
-  - resources/fetch-dockerfile.task.yaml
-  - resources/git-clone.task.yaml
-  - resources/prototype.pipeline.yaml
-  - resources/rolebinding.yaml
-  - resources/role.yaml
+  - resources/Namespace.tekton-devfile-prototype.yaml
+  - resources/Pipeline.prototype.yaml
+  - resources/Role.devfile-role.yaml
+  - resources/RoleBinding.devfile-role-binding.yaml
+  - resources/ServiceAccount.build-bot.yaml
+  - resources/Task.buildah.yaml
+  - resources/Task.deploy.yaml
+  - resources/Task.fetch-and-fill-manifest.yaml
+  - resources/Task.fetch-dockerfile.yaml
+  - resources/Task.git-clone.yaml

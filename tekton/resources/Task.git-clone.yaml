@@ -1,3 +1,4 @@
+---
 # From https://raw.githubusercontent.com/tektoncd/catalog/v1beta1/git/git-clone.yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task

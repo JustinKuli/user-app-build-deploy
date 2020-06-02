@@ -1,3 +1,4 @@
+---
 # From https://raw.githubusercontent.com/tektoncd/catalog/v1beta1/buildah/buildah.yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task

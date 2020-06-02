@@ -36,7 +36,7 @@ oc apply -k tekton/
 
 # Running the example pipeline
 
-6. Modify the example PipelineRun to point to your github repository and docker registry, adjusting these lines:
+6. Modify the example PipelineRun (at `tekton/example/PipelineRun.prototype-run.yaml`) to point to your github repository and docker registry, adjusting these lines:
 ```
     - name: repo-url
       value: https://github.com/a-roberts/user-app-build-deploy.git
@@ -46,7 +46,7 @@ oc apply -k tekton/
 
 7. Create the example PipelineRun (and the PVC that it will use):
 ```
-sed -e "s/PROTOTYPE_PVC/$(oc create -f tekton/example-pvc.yaml -o=jsonpath='{.metadata.name}')/" tekton/example.pipeline-run.yaml | oc create -f -
+sed -e "s/PROTOTYPE_PVC/$(oc create -f tekton/example/PersistentVolumeClaim.prototype-pvc.yaml -o=jsonpath='{.metadata.name}')/" tekton/example/PipelineRun.prototype-run.yaml | oc create -f -
 ```
 
 The pipeline takes URLs for the github repository hosting the code with the devfile and the target URL for the created image. Then it:
