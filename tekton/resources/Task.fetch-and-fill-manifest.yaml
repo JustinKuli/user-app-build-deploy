@@ -20,16 +20,18 @@ spec:
       script: |
         MANIFEST_PATH="$(workspaces.source.path)/$(params.manifestSubPath)"
         DEVFILE="$(workspaces.source.path)/$(params.devfilePath)"
-        LOOKUP='components.(id==deploy-image).manifest.path'
-        cat $DEVFILE
-        echo $LOOKUP
-        echo "done the lookup"
-        MANIFEST_URL=$(yq r $DEVFILE $LOOKUP)
+
+        # Fetch deployment manifest
+        MANIFEST_URL=$(yq r $DEVFILE 'components.(id==deploy-image).manifest.path')
         wget -O $MANIFEST_PATH $MANIFEST_URL
+
+        # Replace image in deployment manifest
         yq w -i $MANIFEST_PATH 'spec.applicationImage' "$(params.newImage)"
-        echo "Manifest at $(MANIFEST_PATH), printing it"
-        cat $MANIFEST_PATH
+
+        # Replace project name based on devfile.yaml
         PROJECT_NAME=$(yq r $DEVFILE 'projects[0].name') 
         yq w -i $MANIFEST_PATH 'metadata.name' $PROJECT_NAME
+
+        # Replace port used by application, based on devfile.yaml
         PORT=$(yq r $DEVFILE 'components.*.(endpoints)' | yq r - '[0].port')
         yq w -i $MANIFEST_PATH 'spec.service.port' $PORT
