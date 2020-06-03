@@ -57,7 +57,7 @@ The pipeline takes URLs for the github repository hosting the code with the devf
 5. Fills the deployment manifest with the new image/tag.
 6. Attempts to deploy the resource.
 
-# Sample applciation for build/deploy pipeline
+# Sample application for build/deploy pipeline
 
 This is just a simple express.js application along with a devfile.yaml that provides links to :
 - build information - Dockerfile to convert this source into a container image
